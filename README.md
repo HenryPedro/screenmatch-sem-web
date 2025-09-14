@@ -4,38 +4,58 @@
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)
 
-Este projeto é uma aplicação de console (via terminal) desenvolvida em Java para buscar e exibir informações sobre séries de TV, utilizando a OMDb API como fonte de dados.
-
 ## 🚀 Sobre o Projeto
 
-O **ScreenMatch** permite que o usuário, através de uma interface de linha de comando, pesquise por suas séries favoritas e obtenha detalhes sobre suas temporadas e episódios. É um projeto focado no aprendizado e na prática de conceitos essenciais do ecossistema Java, como o consumo de APIs, a desserialização de dados (JSON) e a manipulação de objetos.
+O **ScreenMatch** é uma aplicação de console (terminal) desenvolvida em Java. Sua principal função é buscar e exibir informações sobre séries de TV utilizando a API externa [OMDb API](https.www.omdbapi.com).
 
-### Funcionalidades Principais
-- **Busca de Séries:** Pesquise por qualquer série pelo título.
-- **Listagem de Dados:** Visualize todas as temporadas e episódios da série encontrada.
-- **Estatísticas:** Gere estatísticas, como o top 5 melhores episódios baseados na avaliação.
-- **Interação via Console:** Toda a interação acontece de forma simples e direta no terminal.
+Este projeto, inspirado em um popular desafio de aprendizado da Alura, foi desenvolvido para colocar em prática conceitos fundamentais do ecossistema Java, como o consumo de APIs, a desserialização de dados JSON, o uso de `Records`, `Streams` e a estruturação de uma aplicação de forma modular e coesa.
+
+### Funcionalidades
+- **Busca de Séries:** Permite ao usuário buscar por uma série pelo título.
+- **Listagem de Temporadas:** Exibe todas as temporadas da série encontrada.
+- **Listagem de Episódios:** Mostra os detalhes de todos os episódios de uma temporada.
+- **Estatísticas:** Apresenta dados estatísticos, como o top 5 melhores episódios da série com base na avaliação.
 
 ## 💻 Tecnologias Utilizadas
 
-Este projeto foi construído com as seguintes tecnologias:
+O projeto foi construído sobre uma base sólida de tecnologias do ecossistema Java, focando em simplicidade e eficiência para uma aplicação de console.
 
-- **Java:** Linguagem de programação principal, utilizada em sua versão 17 ou superior.
-- **Spring Boot:** Utilizado para simplificar a configuração e a injeção de dependências, mesmo sem o módulo web. Ele gerencia o ciclo de vida dos componentes da aplicação de forma eficiente.
-- **Maven:** Ferramenta de automação de build e gerenciamento de dependências. Responsável por baixar as bibliotecas necessárias para o projeto.
-- **Jackson Databind:** Biblioteca para converter (desserializar) os dados no formato JSON, recebidos da API, em objetos Java, facilitando a manipulação dos dados.
-- **OMDb API:** API externa que serve como fonte de dados para todas as informações sobre filmes e séries.
+- **Java (JDK 17+):**
+  É a linguagem de programação principal do projeto, utilizando recursos modernos como `Records` para a criação de DTOs (Data Transfer Objects) imutáveis e a API de `Streams` para manipulação de coleções de dados.
 
-## 🏗️ Estrutura do Projeto
+- **Spring Boot:**
+  Embora seja uma aplicação "sem-web", o framework é utilizado para facilitar a configuração e a **injeção de dependências**, tornando o código mais limpo, modular e fácil de manter. Ele gerencia o ciclo de vida dos componentes da aplicação sem a necessidade de um servidor web.
 
-O código é organizado de forma modular, separando as responsabilidades em diferentes pacotes e classes:
+- **Maven:**
+  É a ferramenta de automação de build e gerenciamento de dependências. O arquivo `pom.xml` define todas as bibliotecas necessárias, como Jackson e Spring Boot, e automatiza o processo de compilação do projeto.
 
-- `br.com.alura.screenmatch.main.Principal`: Classe principal que contém o método `main`. É o ponto de entrada da aplicação e responsável por exibir o menu e interagir com o usuário.
-- `br.com.alura.screenmatch.service.ConsumoApi`: Classe de serviço responsável por realizar as chamadas HTTP para a OMDb API e obter os dados brutos em formato JSON.
-- `br.com.alura.screenmatch.service.ConverteDados`: Serviço que utiliza a biblioteca Jackson para desserializar a resposta JSON em objetos Java.
-- `br.com.alura.screenmatch.model`: Pacote que contém as classes ou `Records` (`DadosSerie`, `DadosTemporada`, `DadosEpisodio`) que mapeiam a estrutura dos dados retornados pela API.
+- **Jackson Databind:**
+  Biblioteca fundamental para a **desserialização** dos dados. Ela converte o texto em formato JSON, recebido da OMDb API, em objetos Java, permitindo uma manipulação de dados segura e orientada a objetos.
+
+## 🏗️ Arquitetura e Estrutura
+
+O código foi organizado seguindo princípios de separação de responsabilidades para garantir um software de fácil manutenção e escalabilidade.
+
+- **`main.Principal`:**
+  Ponto de entrada da aplicação (`main`). Responsável pelo loop de execução, exibição do menu de opções e por orquestrar as chamadas aos serviços com base na interação do usuário.
+
+- **`service.ConsumoApi`:**
+  Classe de serviço dedicada a fazer a chamada HTTP para a OMDb API. Sua única responsabilidade é buscar os dados externos e retorná-los como uma `String` no formato JSON.
+
+- **`service.ConverteDados`:**
+  Serviço que atua como um "conversor" genérico. Utiliza a biblioteca Jackson para transformar a `String` JSON obtida pelo `ConsumoApi` em objetos Java (DTOs).
+
+- **`model` (Pacote):**
+  Contém as classes ou `Records` que representam os dados da aplicação (`DadosSerie`, `DadosTemporada`, `DadosEpisodio`). Estes são os DTOs que mapeiam diretamente a estrutura da resposta da API.
 
 ## ▶️ Como Executar
+
+#### Pré-requisitos
+- Java (JDK 17 ou superior)
+- Maven
+- Uma chave da API OMDb
+
+#### Passos
 
 1. **Clone o repositório:**
    ```bash
@@ -47,20 +67,16 @@ O código é organizado de forma modular, separando as responsabilidades em dife
    cd screenmatch-sem-web
    ```
 
-3. **Obtenha uma chave da API:**
-   - Acesse [OMDb API](http://www.omdbapi.com/apikey.aspx) para obter sua chave de API gratuita.
-   - Você precisará adicionar essa chave no código, provavelmente na classe `ConsumoApi` onde a URL da API é montada.
+3. **Obtenha e configure sua chave da API:**
+   - Acesse [OMDb API](http://www.omdbapi.com/apikey.aspx) para gerar sua chave gratuita.
+   - Adicione a chave no local indicado no código, provavelmente na classe `ConsumoApi` onde a URL da requisição é construída.
 
-4. **Compile e execute o projeto:**
-   - Sendo um projeto Maven, você pode executá-lo através da sua IDE (Eclipse, IntelliJ) ou compilá-lo e executá-lo via terminal.
+4. **Compile e execute o projeto via Maven:**
+   ```bash
+   # Compila o projeto e empacota em um arquivo .jar
+   mvn clean package
 
-```bash
-# Compilar o projeto
-mvn clean install
-
-# Executar o arquivo .jar gerado (verifique o nome do arquivo na pasta /target)
-java -jar target/screenmatch-0.0.1-SNAPSHOT.jar
-```
-
+   # Executa o arquivo gerado (verifique a versão no nome do arquivo dentro da pasta /target)
+   java -jar target/screenmatch-0.0.1-SNAPSHOT.jar
+   ```
 ---
-*Este README foi gerado com a ajuda do Gemini.*
